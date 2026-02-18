@@ -104,7 +104,7 @@ export default function Football() {
     <div  className="flex flex-col position-relative items-center gap-6 p-6 md:p-10 bg-slate-900 min-h-screen text-white">
       <div className="w-full max-w-4xl">
         <div className="flex gap-2 justify-center overflow-x-auto pb-4 no-scrollbar">
-          {Object.keys(FORMATIONS).map((f) => (
+          {(Object.keys(FORMATIONS) as FormationKey[]).map((f) => (
             <button
               key={f}
               onClick={() => switchFormation(f)}

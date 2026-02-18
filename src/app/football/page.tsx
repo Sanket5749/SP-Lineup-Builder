@@ -29,7 +29,7 @@ const FORMATIONS = {
   ]
 };
 
-export default function LineupBuilder() {
+export default function Football() {
   const [players, setPlayers] = useState(FORMATIONS["4-3-3"].map(p => ({ ...p, name: "Empty", img: null })));
   const [activeFormation, setActiveFormation] = useState("4-3-3");
   const [search, setSearch] = useState("");

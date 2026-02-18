@@ -1,8 +1,23 @@
 "use client";
 import { useState, useEffect } from "react";
 
-export default function Dream11Builder() {
-  const [players, setPlayers] = useState(
+interface PlayerResult {
+  idPlayer?: string;
+  strPlayer?: string;
+  strThumb?: string | null;
+  strTeam?: string;
+}
+
+interface SlotPlayer {
+  id: number;
+  name: string;
+  role: string;
+  img: string | null;
+  team?: string;
+}
+
+export default function Cricket() {
+  const [players, setPlayers] = useState<SlotPlayer[]>(
     Array.from({ length: 11 }, (_, i) => ({
       id: i + 1,
       name: "Empty Slot",
@@ -12,8 +27,8 @@ export default function Dream11Builder() {
   );
 
   const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
-  const [activeId, setActiveId] = useState(null);
+  const [results, setResults] = useState<PlayerResult[]>([]);
+  const [activeId, setActiveId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Search API Logic (TheSportsDB)
@@ -40,15 +55,15 @@ export default function Dream11Builder() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const assignPlayer = (pData) => {
+  const assignPlayer = (pData: PlayerResult) => {
     setPlayers((prev) =>
       prev.map((p) =>
         p.id === activeId
           ? {
               ...p,
-              name: pData.strPlayer,
-              img: pData.strThumb,
-              team: pData.strTeam,
+              name: pData.strPlayer || p.name,
+              img: pData.strThumb || p.img,
+              team: pData.strTeam || p.team,
             }
           : p,
       ),

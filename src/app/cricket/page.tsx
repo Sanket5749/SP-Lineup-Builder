@@ -102,7 +102,7 @@ export default function Cricket() {
                   <img
                     src={p.strThumb}
                     className="w-10 h-10 rounded-full object-cover"
-                    alt=""
+                    alt="player thumbnail"
                   />
                   <div>
                     <p className="text-xs font-bold group-hover:text-white">

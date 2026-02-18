@@ -1,7 +1,16 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const FORMATIONS = {
+interface FormationPos {
+  id: number;
+  pos: string;
+  x: string;
+  y: string;
+}
+
+type FormationKey = "4-3-3" | "4-4-2" | "4-2-3-1" | "3-4-3";
+
+const FORMATIONS: Record<FormationKey, FormationPos[]> = {
   "4-3-3": [
     { id: 1, pos: "ST", x: "50%", y: "12%" }, { id: 2, pos: "LW", x: "20%", y: "18%" }, { id: 3, pos: "RW", x: "80%", y: "18%" },
     { id: 4, pos: "CM", x: "30%", y: "42%" }, { id: 5, pos: "CDM", x: "50%", y: "55%" }, { id: 6, pos: "CM", x: "70%", y: "42%" },
@@ -30,12 +39,26 @@ const FORMATIONS = {
 };
 
 export default function Football() {
-  const [players, setPlayers] = useState(FORMATIONS["4-3-3"].map(p => ({ ...p, name: "Empty", img: null })));
-  const [activeFormation, setActiveFormation] = useState("4-3-3");
-  const [search, setSearch] = useState("");
-  const [results, setResults] = useState([]);
-  const [activeId, setActiveId] = useState(null);
-  const [loading, setLoading] = useState(false);
+  interface PlayerSlot extends FormationPos {
+    name: string;
+    img: string | null;
+  }
+
+  interface PlayerResult {
+    idPlayer?: string;
+    strPlayer?: string;
+    strThumb?: string | null;
+    strTeam?: string;
+  }
+
+  const [players, setPlayers] = useState<PlayerSlot[]>(
+    FORMATIONS["4-3-3"].map((p) => ({ ...p, name: "Empty", img: null })),
+  );
+  const [activeFormation, setActiveFormation] = useState<FormationKey>("4-3-3");
+  const [search, setSearch] = useState<string>("");
+  const [results, setResults] = useState<PlayerResult[]>([]);
+  const [activeId, setActiveId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Search API Logic
   useEffect(() => {
@@ -52,19 +75,27 @@ export default function Football() {
     return () => clearTimeout(debounce);
   }, [search]);
 
-  const switchFormation = (type) => {
+  const switchFormation = (type: FormationKey) => {
     const newCoords = FORMATIONS[type];
     setActiveFormation(type);
-    setPlayers(prev => prev.map((p, idx) => ({
-      ...p,
-      x: newCoords[idx].x,
-      y: newCoords[idx].y,
-      pos: newCoords[idx].pos
-    })));
+    setPlayers((prev) =>
+      prev.map((p, idx) => ({
+        ...p,
+        x: newCoords[idx].x,
+        y: newCoords[idx].y,
+        pos: newCoords[idx].pos,
+      })),
+    );
   };
 
-  const assignPlayer = (playerData) => {
-    setPlayers(prev => prev.map(p => p.id === activeId ? { ...p, name: playerData.strPlayer, img: playerData.strThumb } : p));
+  const assignPlayer = (playerData: PlayerResult) => {
+    setPlayers((prev) =>
+      prev.map((p) =>
+        p.id === activeId
+          ? { ...p, name: playerData.strPlayer || p.name, img: playerData.strThumb ?? p.img }
+          : p,
+      ),
+    );
     setSearch("");
     setActiveId(null);
   };

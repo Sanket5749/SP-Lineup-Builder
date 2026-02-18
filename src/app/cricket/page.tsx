@@ -100,7 +100,7 @@ export default function Cricket() {
                   className="w-full flex items-center gap-3 p-2 bg-white/5 hover:bg-green-600 rounded-2xl transition-all text-left group"
                 >
                   <img
-                    src={p.strThumb}
+                    src={p.strThumb ?? undefined}
                     className="w-10 h-10 rounded-full object-cover"
                     alt="player thumbnail"
                   />
@@ -132,7 +132,7 @@ export default function Cricket() {
 
               {player.img ? (
                 <img
-                  src={player.img}
+                  src={player.img ?? undefined}
                   className="absolute inset-0 w-full h-full object-cover"
                   alt=""
                 />

@@ -44,6 +44,7 @@ interface PlayerSlot extends FormationPos {
   name: string;
   img: string | null;
   playerId?: string;
+  rating?: number;
 }
 
 interface PlayerResult {

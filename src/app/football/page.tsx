@@ -272,39 +272,6 @@ export default function Football() {
     return ratedTeams.reduce((winner, team) => (team.totalRating > winner.totalRating ? team : winner));
   };
 
-  const loadDemoMatch = () => {
-    setGameType("multiplayer");
-    setGameMode("setup");
-    
-    // Fill teams with demo players
-    const demoTeamsFormatted: Team[] = DEMO_TEAMS.map((demoTeam) => ({
-      id: demoTeam.id,
-      name: demoTeam.name,
-      formation: demoTeam.formation,
-      color: demoTeam.color,
-      totalRating: 0,
-      players: FORMATIONS[demoTeam.formation].map((formationPos, idx) => ({
-        ...formationPos,
-        id: formationPos.id,
-        pos: formationPos.pos,
-        x: formationPos.x,
-        y: formationPos.y,
-        name: demoTeam.players[idx]?.name || "Empty",
-        img: null,
-        playerId: undefined,
-      })),
-    }));
-
-    setTeams(demoTeamsFormatted);
-    setGameMode("view");
-    setActiveTeam(0);
-    
-    // Calculate ratings
-    setTimeout(() => {
-      calculatePlayerRatings(demoTeamsFormatted);
-    }, 100);
-  };
-
   // GAME TYPE SELECTION
   if (!gameType) {
     return (
